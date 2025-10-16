@@ -1,12 +1,18 @@
 const formularioLogin = (req,res) => {
         res.render('auth/login', {
-            autenticado: true,
+            tituloPagina: 'Inicio de Sesion',
         })
     }
 
 const formularioRegistro = (req,res) => {
         res.render('auth/register', {
-            autenticado: true,
+            tituloPagina: 'Registro de usuario',
         })
     }
-export {formularioLogin, formularioRegistro};
+
+const formularioOlvidePassword = (req,res) => {
+    res.render('auth/olvide-password', {
+        tituloPagina: 'Olvide contraseña',
+    })
+}
+export {formularioLogin, formularioRegistro, formularioOlvidePassword};

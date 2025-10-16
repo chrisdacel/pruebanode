@@ -9,6 +9,11 @@ const app = express();
 app.set('view engine', 'pug');
 app.set('views', './views' );
 
+
+// Definir la ruta del Public
+app.use(express.static('public'))
+
+
 // Routing
 app.use('/auth', usuariosRoutes);
 
