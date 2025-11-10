@@ -6,12 +6,15 @@ import { emailRegistro } from "../helpers/emails.js";
 const formularioLogin = (req, res) => {
   res.render("auth/login", {
     tituloPagina: "Inicio de Sesión",
+    csrfToken: req.csrfToken(),
   });
 };
 
 const formularioRegistro = (req, res) => {
+  console.log(req.csrfToken());
   res.render("auth/register", {
     tituloPagina: "Registro de Usuario",
+    csrfToken: req.csrfToken(),
   });
 };
 
@@ -46,6 +49,7 @@ const registrar = async (req, res) => {
     return res.render("auth/register", {
       tituloPagina: "Registro de Usuario",
       errores: resultado.array(),
+      csrfToken: req.csrfToken(),
       usuario: {
         nombre: req.body.nombre,
         email: req.body.email,
@@ -61,6 +65,7 @@ const registrar = async (req, res) => {
   if (existeUsuario) {
     return res.render('auth/register' ,{
       tituloPagina: 'Registro de Usuario',
+      csrfToken: req.csrfToken(),
       errores:[{msg: 'El usuario ya existe'}],
       usuario:{
         nombre: req.body.Nombre,
@@ -101,16 +106,31 @@ const confirmar = async(req,res) => {
   // Validar el token sea verdadero
   const usuario = await Usuario.findOne({where: {token}});
   console.log(usuario);
+
+  // Confirmar la cuenta
+  if(!usuario) {
+    return res.render("auth/confirmar-cuenta",{
+      tituloPagina: "Error al crear cuenta",
+      mensaje: "Hubo un error al confirmar la cuenta, Intentalo de nuevo",
+      error: true,
+    });
+  }
+
+  // Validar la informacion y mandarla a la db
+  usuario.token= null;
+  usuario.confirmado= true;
+  await usuario.save();
+
+  res.render("auth/confirmar-cuenta", {
+    tituloPagina: "Cuenta confirmada",
+    mensaje: "La cuenta se confirmó correctamente",
+  })
 }
-
-
-
-// Confirmar la cuenta
-
 
 const formularioOlvidePassword = (req, res) => {
   res.render("auth/olvide-password", {
     tituloPagina: "Olvide Contraseña",
+    csrfToken: req.csrfToken(),
   });
 };
 

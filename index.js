@@ -1,10 +1,22 @@
 // const express = require('express');
 import express from "express";
+import csurf from "csurf";
+import cookieParser from "cookie-parser";
 import usuariosRoutes from "./routes/usuariosRoutes.js"
 import db from './config/db.js'
 
+
 // Crear APP
 const app = express();
+
+// Habilitar lectura de los forms
+app.use(express.urlencoded({ extended: true }));
+
+// Habilitar el Cookie Parser
+app.use(cookieParser());
+
+// Habiliar el CSRF
+app.use(csurf({ cookie: true }));
 
 // Conexion a la db
 try{
@@ -15,13 +27,9 @@ try{
     console.error('El error de conexion es ' + error)
 }
 
-// Habilitar la lectura de los formularios
-app.use(express.urlencoded({extended: true}))
-
 // Habilitar pub
 app.set('view engine', 'pug');
 app.set('views', './views' );
-
 
 // Definir la ruta del Public
 app.use(express.static('public'))
