@@ -1,26 +1,53 @@
-import { error } from 'node:console';
-import {exit} from 'node:process';
-import categoria from './categoria.js';
-import Categorias from '../models/Categorias.js';
-import db from '../config/db.js';
+import { exit } from "node:process";
+import categoria from "./categoria.js";
+import precio from "./precio.js";
+import { Categorias, Precios } from "../models/index.js";
+import db from "../config/db.js";
 
 const importarDatos = async () => {
-    try {
-        // Autenticar
-        await db. authenticate();
+  try {
+    // Autenticar
+    await db.authenticate();
 
-        // Ganerar las columnas
-        await db.sync();
+    //Generar las columnas
+    await db.sync();
 
-        // Insertar los datos
-        await Categorias.bulkCreate(categoria);
+    //Insertar los datos
+    await Promise.all([
+      Categorias.bulkCreate(categoria),
+      Precios.bulkCreate(precio),
+    ]);
 
-    } catch {error} {
-        console.log(error);
-        exit(1);
-    }
+    console.log("Datos importados correctamente");
+    exit();
+  } catch (error) {
+    console.log(error);
+    exit(1);
+  }
+};
+
+const eliminarDatos = async () => {
+  try {
+    //Opcion 1
+    // await Promise.all([
+    //   Categorias.destroy({ where: {} }),
+    //   Precios.destroy({ where: {} }),
+    // ]);
+
+    //Opcion Recomendada
+    await db.sync({ force: true });
+    console.log("Eliminado correctamente!");
+    exit();
+  } catch (error) {
+    console.log(error);
+    exit(1);
+  }
+};
+
+if (process.argv[2] === "-i") {
+  importarDatos();
 }
 
-if(process.argv[2] === '-i') {
-    importarDatos();
+if (process.argv[2] === "-e") {
+  eliminarDatos();
 }
