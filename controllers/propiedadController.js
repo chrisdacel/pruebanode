@@ -5,7 +5,6 @@ const admin = (req, res) => {
   res.render("propiedades/admin", {
     tituloPagina: "Mis propiedades",
     csrfToken: req.csrfToken(),
-    headerAdmin: true,
   });
 };
 
@@ -21,7 +20,6 @@ const crear = async (req, res) => {
     csrfToken: req.csrfToken(),
     categorias,
     precios,
-    headerAdmin: true,
     datos: {},
   });
 };
@@ -47,6 +45,54 @@ const guardar = async (req, res) => {
       datos: req.body,
     });
   }
+
+  // Crear registro
+  const {
+    titulo,
+    descripcion,
+    habitaciones,
+    parqueaderos,
+    wc,
+    calle,
+    lat,
+    lng,
+    precio: precioId,
+    categoria: categoriaId,
+  } = req.body;
+
+  const { id: usuarioId } = req.usuario;
+
+  try {
+    const propiedadGuardada = await Propiedades.create({
+      titulo,
+      descripcion,
+      habitaciones,
+      parqueaderos,
+      wc,
+      calle,
+      lat,
+      lng,
+      precioId,
+      categoriaId,
+      usuarioId,
+      imagen: "",
+    });
+
+    const { id } = propiedadGuardada;
+
+    res.redirect(`/propiedades/agregar-imagen/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
 };
 
-export { admin, crear, guardar };
+const agregarImagen = async (req, res) => {
+  res.render("propiedades/agregar-imagen", {
+    tituloPagina: "Agregar una imagen",
+    csrfToken: req.csrfToken(),
+  });
+
+  console.log(req.params);
+};
+
+export { admin, crear, guardar, agregarImagen };
