@@ -1,0 +1,23 @@
+extends ../layout/admin
+
+block contenido
+    .py-10
+        h1.text-4xl.my-10.font-extrabold.text-center Mensajes
+
+        if mensajes && mensajes.length
+            each mensaje in mensajes
+                .bg-white.shadow.rounded-lg.mb-4.p-4
+                    .flex.items-center.justify-between
+                        .flex.items-center.gap-3
+                            if mensaje.usuario && mensaje.usuario.nombre
+                                .text-sm
+                                    p.font-bold= mensaje.usuario.nombre
+                                    p.text-xs.text-gray-500= formatearFecha(mensaje.createdAt)
+                            else
+                                p.text-sm.text-gray-500 Usuario desconocido
+                    .mt-3
+                        p= mensaje.mensaje
+        else
+            p.text-center No hay mensajes para esta propiedad
+
+        a(href='/mis-propiedades' class='mt-6 inline-block bg-indigo-600 text-white px-4 py-2 rounded') Volver

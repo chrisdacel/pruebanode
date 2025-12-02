@@ -36,6 +36,7 @@ const admin = async (req, res) => {
         include: [
           { model: Categorias, as: "categoria" },
           { model: Precios, as: "precio" },
+          { model: Mensaje, as: "mensajes" },
         ],
       }),
       Propiedades.count({
@@ -364,6 +365,7 @@ const mostrarPropiedad = async (req, res) => {
     csrfToken: req.csrfToken(),
     usuario: req.usuario,
     esVendedor: esVendedor(req.usuario?.id, propiedad.usuarioId),
+    enviado: req.query.enviado === "1",
   });
 };
 
@@ -407,7 +409,8 @@ const enviarMensaje = async (req, res) => {
     usuarioId,
   });
 
-  res.redirect("/");
+  // Redirigir de nuevo a la propiedad y mostrar mensaje de éxito
+  return res.redirect(`/propiedad/${propiedadId}?enviado=1`);
 };
 
 // Leer mensajes recibidos

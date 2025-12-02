@@ -8,6 +8,9 @@ Propiedades.belongsTo(Precios, { ForeignKey: "preciosId" });
 Propiedades.belongsTo(Categorias, { ForeignKey: "categoriasId" });
 Propiedades.belongsTo(Usuarios, { ForeignKey: "UsuarioId" });
 
+// Asociación: una propiedad puede tener muchos mensajes
+Propiedades.hasMany(Mensaje, { foreignKey: "propiedadId", as: "mensajes" });
+
 Mensaje.belongsTo(Propiedades, { foreignKey: "propiedadId" });
 Mensaje.belongsTo(Usuarios, { foreignKey: "usuarioId" });
 
