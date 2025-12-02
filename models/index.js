@@ -15,3 +15,4 @@ Mensaje.belongsTo(Propiedades, { foreignKey: "propiedadId" });
 Mensaje.belongsTo(Usuarios, { foreignKey: "usuarioId" });
 
 export { Propiedades, Precios, Categorias, Usuarios, Mensaje };
+

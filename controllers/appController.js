@@ -5,7 +5,6 @@ const inicio = async (req, res) => {
 const admin = req.usuario ? true : false;
 
   
-  console.log('el valor es',admin);
   const [categorias, precios, casas, departamentos] = await Promise.all([
     Categorias.findAll({ raw: true }),
     Precios.findAll({ raw: true }),

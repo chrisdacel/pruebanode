@@ -78,6 +78,7 @@ router.post(
 );
 
 router.post("/propiedades/eliminar/:id", protegerRuta, eliminar);
+
 router.put("/propiedades/:id", protegerRuta, cambiarEstado);
 
 // Propiedad Independiente
